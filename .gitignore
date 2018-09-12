@@ -1,0 +1,3 @@
+examples/zstd.js
+examples/zstd.wasm
+bin/
