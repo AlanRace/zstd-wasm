@@ -1,51 +1,21 @@
 <!doctype html>
 <html>
-  <script>
-    var Module = {
-      onRuntimeInitialized: function() {
-        console.log('Max C level result: ' + Module.ZSTD_maxCLevel());
-	console.log('ZSTD version: ' + Module.ZSTD_versionNumber());
 
-//https://kapadia.github.io/emscripten/2013/09/13/emscripten-pointers-and-pointers.html
-	var data = new Float64Array([100.2309, 3203.1203921]);
-	var compressed = [0.0, 0.0, 0.0, 0.0];
-	
-	//console.log(data);
-	//Module.ZSTD_compress(compressed, 16, data, 8);
-	//console.log(compressed);
-	let num_bytes = 2 * 8; // 24 MB
-	let dataPtr = Module._malloc(num_bytes);
-	let dataHeap = new Uint8Array(Module.HEAPU8.buffer, dataPtr, num_bytes);
-	dataHeap.set(new Uint8Array(data.buffer));
+<head>
+	<meta charset="UTF-8">
+</head>
+<script>
+	var Module = {
+		onRuntimeInitialized: function () {
+			console.log('zstd-wasm loaded.')
+		}
+	};
+</script>
+<script src="zstd.js"></script>
+<script src="../src/zstd-helper.js"></script>
 
-	let num_bytes_compressed = 4 * 8; // 24 MB
-	let compressedPtr = Module._malloc(num_bytes_compressed);
-	let compressedHeap = new Uint8Array(Module.HEAPU8.buffer, compressedPtr, num_bytes_compressed);
+<body>
+	<button onclick="console.log(zstdDecompressFloat64(zstdCompressFloat64([123.456, 987.765, 398.3409], 10)));">Click me</button>
+</body>
 
-	console.log('Allocated memory on heap.');
-
-	let ret = Module.ZSTD_compress(compressedHeap.byteOffset, num_bytes_compressed, dataHeap.byteOffset, num_bytes, 10);
-
-	console.log('Return value = ' + ret);
-
-	var result = new Float64Array(compressedHeap.buffer, compressedHeap.byteOffset, num_bytes_compressed / 8);
-
-	console.log('Return value = ' + result);
-
-	let num_bytes_decompressed = 2 * 8; // 24 MB
-	let decompressedPtr = Module._malloc(num_bytes_decompressed);
-	let decompressedHeap = new Uint8Array(Module.HEAPU8.buffer, decompressedPtr, num_bytes_decompressed);
-
-	let ret2 = Module.ZSTD_decompress(decompressedHeap.byteOffset, num_bytes_decompressed, compressedHeap.byteOffset, ret);
-
-	console.log('Return value 2 = ' + ret2);
-
-	var decompressed = new Float64Array(decompressedHeap.buffer, decompressedHeap.byteOffset, ret2 / 8);
-
-	console.log('Decompressed = ' + decompressed);
-      }
-
-    };
-  </script>
-  <script src="zstd.js"></script>
 </html>
