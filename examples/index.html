@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+</head>
+<script>
+	var Module = {
+		onRuntimeInitialized: function () {
+			console.log('zstd-wasm loaded.')
+			document.getElementById("compressButton").disabled = false;
+		}
+	};
+</script>
+<script src="../bin/zstd.js"></script>
+<script src="../src/zstd-helper.js"></script>
+
+<body onload="document.getElementById('compressButton').disabled = true;">
+	<button id="compressButton" disabled="true" onclick="console.log(zstdDecompressFloat64(zstdCompressFloat64([123.456, 987.765, 398.3409], 10)));">Click me</button>
+</body>
+
+</html>
