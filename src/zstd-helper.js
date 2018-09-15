@@ -42,8 +42,8 @@ function zstdDecompressFloat64(data) {
 }
 
 function zstdDecompress(data) {
-    if(!data instanceof Uint8Array) {
-        data = Uint8Array(data);
+    if(!(data instanceof Uint8Array)) {
+        data = new Uint8Array(data);
     }
 
     let dataPtr = Module._malloc(data.length);
